@@ -1,8 +1,8 @@
 export default function Hero() {
     return (
-        <section>
-            <h2>Welcome to My App</h2>
-            <p>This is the hero section.</p>
-        </section>
+        <div className="border-2 border-gray-300 rounded-lg p-4 min-h-[25rem]">
+            <div className="bg-gray-200 p-4 min-h-[25rem]" />
+            <p>Some sort of content for the hero section.</p>
+        </div>
     );
 }

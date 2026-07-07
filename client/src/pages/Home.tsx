@@ -7,7 +7,7 @@ export default function HomePage() {
     return (
         <>
             <Header />
-            <main>
+            <main className="grid grid-cols-1 gap-8 p-4">
                 <Hero />
                 <Shop />
                 <About />
