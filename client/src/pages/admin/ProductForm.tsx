@@ -1,17 +1,27 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getProductByID } from "@/services/productServive";
+import { getProductByID, createProduct, updateProduct, deleteProduct } from "@/services/productServive";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea"; 
 
+type ProductFormData = {
+    name: string;
+    description: string;
+    category: string;
+    price: number;
+    cost: number;
+    quantity: number;
+    status: "active" | "archived";
+};
 
 export default function ProductForm() {
     const { id } = useParams();
+    const isEdit = !!id;
 
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<ProductFormData>({
         name: "",
         description: "",
         category: "",
@@ -19,8 +29,6 @@ export default function ProductForm() {
         cost: 0,
         quantity: 0,
         status: "active",
-        created_at: "",
-        updated_at: ""
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,8 +38,11 @@ export default function ProductForm() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(formData);
-        // createProduct(formData)
+        if (isEdit) {
+            await updateProduct(id, formData);
+        } else {
+            await createProduct(formData);
+        }
     };
 
     useEffect(() => {
@@ -48,8 +59,6 @@ export default function ProductForm() {
                 cost: product.cost,
                 quantity: product.quantity,
                 status: product.status,
-                created_at: product.created_at,
-                updated_at: product.updated_at
             })
         }
 
@@ -136,8 +145,21 @@ export default function ProductForm() {
                 </div>
 
                 <div className="flex justify-end">
+                    {isEdit && (
+                        <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={() => {
+                                if (window.confirm("Are you sure you want to delete this product?")) {
+                                    deleteProduct(id);
+                                }
+                            }}
+                        >
+                            Delete Product
+                        </Button>
+                    )}
                     <Button type="submit">
-                        Create Product
+                        {isEdit ? "Update Product" : "Create Product"}
                     </Button>
                 </div>
             </form>

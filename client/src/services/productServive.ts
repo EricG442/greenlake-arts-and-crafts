@@ -17,3 +17,44 @@ export async function getProductByID(id: string): Promise<Product> {
     }
     return response.json() as Promise<Product>;
 }
+
+export async function createProduct(product: Omit<Product, "id" | "created_at" | "updated_at">): Promise<Product> {
+    const response = await fetch(`${API_URL}/products`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(product),
+    });
+    if (!response.ok) {
+        throw new Error("Failed to create product");
+    }
+    return response.json() as Promise<Product>;
+}
+
+export async function updateProduct(id: string, product: Partial<Product>): Promise<Product> {
+    const response = await fetch(`${API_URL}/products/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(product),
+    });
+    if (!response.ok) {
+        throw new Error(`Failed to update product with ID ${id}`);
+    }
+    return response.json() as Promise<Product>;
+}
+
+export async function deleteProduct(id: string): Promise<Product> {
+    const response = await fetch(`${API_URL}/products/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    if (!response.ok) {
+        throw new Error(`Failed to delete product with ID ${id}`);
+    }
+    return response.json() as Promise<Product>;
+}
