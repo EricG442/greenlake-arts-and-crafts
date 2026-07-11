@@ -4,6 +4,7 @@ import {
     SidebarProvider,
     SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/sonner"
 
 import AdminSidebar from "@/components/admin/AdminSidebar";
 
@@ -17,6 +18,7 @@ export default function AdminLayout() {
                     <Outlet />
                 </div>
             </main>
+            <Toaster />
         </SidebarProvider>
     )
 }

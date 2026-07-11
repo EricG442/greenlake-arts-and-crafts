@@ -1,27 +1,30 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getProductByID, createProduct, updateProduct, deleteProduct } from "@/services/productServive";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea"; 
-
-type ProductFormData = {
-    name: string;
-    description: string;
-    category: string;
-    price: number;
-    cost: number;
-    quantity: number;
-    status: "active" | "archived";
-};
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner"; 
 
 export default function ProductForm() {
     const { id } = useParams();
     const isEdit = !!id;
+    const navigate = useNavigate();
+    const DRAFT_KEY = "product-draft";
 
-    const [formData, setFormData] = useState<ProductFormData>({
+    type ProductFormData = {
+        name: string;
+        description: string;
+        category: string;
+        price: number;
+        cost: number;
+        quantity: number;
+        status: "active" | "archived";
+    };
+
+    const initialFormData: ProductFormData = {
         name: "",
         description: "",
         category: "",
@@ -29,20 +32,35 @@ export default function ProductForm() {
         cost: 0,
         quantity: 0,
         status: "active",
+    };
+
+    const [formData, setFormData] = useState<ProductFormData>(() => {
+        if (isEdit) return initialFormData;
+        const draft = localStorage.getItem(DRAFT_KEY);
+        return draft ? (JSON.parse(draft) as ProductFormData) : initialFormData;
     });
 
+    const isFormEmpty = Object.values(formData).some(value => !value);
+    
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        setFormData((prev) => ({ ...prev, [name]: value } as ProductFormData));
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (isFormEmpty) {
+            alert("Please fill in all fields");
+            return;
+        }
         if (isEdit) {
             await updateProduct(id, formData);
         } else {
             await createProduct(formData);
+            localStorage.removeItem(DRAFT_KEY);
         }
+        toast(isEdit ? "Product updated successfully!" : "Product created successfully!", {position: "top-center"});
+        navigate("/admin/inventory");
     };
 
     useEffect(() => {
@@ -65,6 +83,21 @@ export default function ProductForm() {
         loadProduct();
     }, [id]);
 
+    useEffect(() => {
+        if (isEdit) return;
+        const savedDraft = localStorage.getItem(DRAFT_KEY);
+        if (savedDraft) setFormData(JSON.parse(savedDraft));
+    }, [isEdit]);
+
+    useEffect(() => {
+        if (!isEdit) {
+            localStorage.setItem(
+                DRAFT_KEY,
+                JSON.stringify(formData)
+            )
+        }
+    }, [formData,isEdit])
+
     return (
         <div className="max-w-2xl">
             <h1 className="mb-6 text-3xl font-bold">Product Form</h1>
@@ -73,7 +106,6 @@ export default function ProductForm() {
                 onSubmit={handleSubmit}
                 className="space-y-6"
             >
-            {/* fields go here */}
                 <div className="space-y-2">
                     <Label htmlFor="name">Name</Label>
                     <Input 
@@ -144,7 +176,7 @@ export default function ProductForm() {
                     </div>
                 </div>
 
-                <div className="flex justify-end">
+                <div className="flex justify-end gap-2">
                     {isEdit && (
                         <Button
                             type="button"
@@ -152,13 +184,18 @@ export default function ProductForm() {
                             onClick={() => {
                                 if (window.confirm("Are you sure you want to delete this product?")) {
                                     deleteProduct(id);
-                                }
+                                }                    
+                                toast("Product deleted successfully!", {position: "top-center"});
+                                navigate("/admin/inventory");
                             }}
                         >
                             Delete Product
                         </Button>
                     )}
-                    <Button type="submit">
+                    <Button 
+                        type="submit" 
+                        disabled={isFormEmpty && !isEdit}
+                    >
                         {isEdit ? "Update Product" : "Create Product"}
                     </Button>
                 </div>

@@ -6,7 +6,8 @@ import {
     SidebarGroupLabel,
     SidebarMenu,
     SidebarMenuButton,
-    SidebarMenuItem
+    SidebarMenuItem,
+    useSidebar
 } from "@/components/ui/sidebar";
 
 import {
@@ -36,6 +37,15 @@ const items = [
 ];
 
 export default function AdminSidebar() {
+    const { isMobile, setOpenMobile, setOpen } = useSidebar();
+    const handleLinkClick = () => {
+        if (isMobile) {
+            setOpenMobile(false);
+        } else {
+            setOpen(false);
+        }
+    }
+
     return (
         <Sidebar>
             <SidebarContent>
@@ -49,7 +59,7 @@ export default function AdminSidebar() {
                             {items.map( item => (
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton>
-                                        <Link to={item.url}>
+                                        <Link to={item.url} onClick={handleLinkClick}>
                                             <item.icon />
                                             <span>{item.title}</span>
                                         </Link>
