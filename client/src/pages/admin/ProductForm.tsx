@@ -56,6 +56,9 @@ export default function ProductForm() {
     });
 
     const isFormEmpty = Object.values(formData).some(value => !value);
+
+    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -76,6 +79,13 @@ export default function ProductForm() {
         }
         toast(isEdit ? "Product updated successfully!" : "Product created successfully!", {position: "top-center"});
         navigate("/admin/inventory");
+    };
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setImageFile(file);
+        setPreviewUrl(URL.createObjectURL(file));
     };
 
     useEffect(() => {
@@ -220,9 +230,34 @@ export default function ProductForm() {
                         </div>
                     </CardContent>
                 </Card>
-                <div className="grid gap-4 md:grid-cols-3">
 
-                </div>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Product Image</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-2">
+                            <Label htmlFor="image">Image</Label>
+                            <Input
+                                className="bg-muted"
+                                id="image"
+                                name="image"
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                            />
+                        </div>
+                        {previewUrl && (
+                            <div className="mt-4">
+                                <img
+                                    src={previewUrl}
+                                    alt="Preview"
+                                    className="max-h-48 max-w-full rounded-md border"
+                                />
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
 
                 <div className="flex justify-end gap-2">
                     {isEdit && (
