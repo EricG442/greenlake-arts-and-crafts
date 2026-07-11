@@ -6,7 +6,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner"; 
+import { toast } from "sonner";
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle
+} from "@/components/ui/card";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue
+} from "@/components/ui/select";
 
 export default function ProductForm() {
     const { id } = useParams();
@@ -100,80 +115,113 @@ export default function ProductForm() {
 
     return (
         <div className="max-w-2xl">
-            <h1 className="mb-6 text-3xl font-bold">Product Form</h1>
-
             <form 
                 onSubmit={handleSubmit}
                 className="space-y-6"
             >
-                <div className="space-y-2">
-                    <Label htmlFor="name">Name</Label>
-                    <Input 
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                    />
-                </div>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Product Information</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                            <div className="flex flex-row gap-4 items-end">
+                                <div className="space-y-2 w-3/4">
+                                    <Label htmlFor="name">Name</Label>
+                                    <Input 
+                                        className="bg-muted"
+                                        id="name"
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                    />
+                                </div>
 
-                <div className="space-y-2">
-                    <Label htmlFor="description">Description</Label>
-                    <Textarea 
-                        id="description"
-                        name="description"
-                        value={formData.description}
-                        onChange={e => {
-                            setFormData(prev => ({ ...prev, description: e.target.value }))
-                        }}
-                    />
-                </div>
+                                <Select id="category" value={formData.category} onValueChange={(value) => setFormData(prev => ({ ...prev, category: value ?? "" }))}>
+                                    <SelectTrigger className="bg-muted">
+                                        <SelectValue placeholder="Select a category" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectLabel>Categories</SelectLabel>
+                                            <SelectItem value="Group 1">Group 1</SelectItem>
+                                            <SelectItem value="Group 2">Group 2</SelectItem>
+                                            <SelectItem value="Group 3">Group 3</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>                                                             
+                            </div>
 
-                <div className="space-y-2">
-                    <Label htmlFor="category">Category</Label>
-                    <Input 
-                        id="category"
-                        name="category"
-                        value={formData.category}
-                        onChange={handleChange}
-                    />
-                </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="description">Description</Label>
+                                <Textarea 
+                                    id="description"
+                                    name="description"
+                                    className="bg-muted min-h-[10rem]"
+                                    value={formData.description}
+                                    onChange={e => {
+                                        setFormData(prev => ({ ...prev, description: e.target.value }))
+                                    }}
+                                />
+                            </div>
+                    </CardContent>
+                </Card>
 
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Product Details</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4 grid gap-4 md:grid-cols-3">
+                        <div className="space-y-2">
+                            <Label htmlFor="price">Price</Label>
+                            <Input
+                                className="bg-muted"
+                                id="price"
+                                name="price"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                value={formData.price}
+                                onChange={e => {
+                                    setFormData(prev => ({ ...prev, price: Number(e.target.value) }))
+                                }}
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="cost">Cost</Label>
+                            <Input
+                                className="bg-muted"
+                                id="cost"
+                                name="cost"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                value={formData.cost}
+                                onChange={e => {
+                                    setFormData(prev => ({ ...prev, cost: Number(e.target.value) }))
+                                }}
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="quantity">Quantity</Label>
+                            <Input 
+                                className="bg-muted"
+                                id="quantity"
+                                name="quantity"
+                                type="number"
+                                min="0"
+                                step="1"
+                                value={formData.quantity}
+                                onChange={e => {
+                                    setFormData(prev => ({ ...prev, quantity: Number(e.target.value) }))
+                                }}
+                            />
+                        </div>
+                    </CardContent>
+                </Card>
                 <div className="grid gap-4 md:grid-cols-3">
-                    <div className="space-y-2">
-                        <Label htmlFor="price">Price</Label>
-                        <Input 
-                            id="price"
-                            name="price"
-                            value={formData.price}
-                            onChange={e => {
-                                setFormData(prev => ({ ...prev, price: Number(e.target.value) }))
-                            }}
-                        />
-                    </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="cost">Cost</Label>
-                        <Input 
-                            id="cost"
-                            name="cost"
-                            value={formData.cost}
-                            onChange={e => {
-                                setFormData(prev => ({ ...prev, cost: Number(e.target.value) }))
-                            }}
-                        />
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label htmlFor="quantity">Quantity</Label>
-                        <Input 
-                            id="quantity"
-                            name="quantity"
-                            value={formData.quantity}
-                            onChange={e => {
-                                setFormData(prev => ({ ...prev, quantity: Number(e.target.value) }))
-                            }}
-                        />
-                    </div>
                 </div>
 
                 <div className="flex justify-end gap-2">
@@ -184,9 +232,9 @@ export default function ProductForm() {
                             onClick={() => {
                                 if (window.confirm("Are you sure you want to delete this product?")) {
                                     deleteProduct(id);
-                                }                    
+                                    navigate("/admin/inventory");
+                                } 
                                 toast("Product deleted successfully!", {position: "top-center"});
-                                navigate("/admin/inventory");
                             }}
                         >
                             Delete Product
