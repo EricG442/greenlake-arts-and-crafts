@@ -72,3 +72,18 @@ export async function deleteProduct(req: Request, res: Response): Promise<void> 
         res.status(500).json({ message: "Failed to delete product" });
     }
 }
+
+export async function uploadProductImage(req: Request, res: Response): Promise<void> {
+    try {
+        const file = req.file;
+        if (!file) {
+            res.status(400).json({ message: "No file uploaded" });
+            return;
+        }
+        await productService.uploadProductImage(file);
+        res.status(200).json({ message: "Product image uploaded successfully" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Failed to upload product image" });
+    }
+}

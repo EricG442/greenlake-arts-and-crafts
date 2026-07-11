@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getProductByID, createProduct, updateProduct, deleteProduct } from "@/services/productServive";
+import { getProductByID, createProduct, updateProduct, deleteProduct, uploadProductImage } from "@/services/productServive";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -74,6 +74,10 @@ export default function ProductForm() {
         if (isEdit) {
             await updateProduct(id, formData);
         } else {
+            if (imageFile) {
+                const imageResponse = await uploadProductImage(imageFile);
+                console.log(imageResponse);
+            }
             await createProduct(formData);
             localStorage.removeItem(DRAFT_KEY);
         }

@@ -58,3 +58,16 @@ export async function deleteProduct(id: string): Promise<Product> {
     }
     return response.json() as Promise<Product>;
 }
+
+export async function uploadProductImage(imageFile: File): Promise<any> {
+    const formData = new FormData();
+    formData.append("image", imageFile);
+    const response = await fetch(`${API_URL}/products/image`, {
+        method: "POST",
+        body: formData,
+    });
+    if (!response.ok) {
+        throw new Error("Failed to upload image for product");
+    }
+    return response.json();
+}
