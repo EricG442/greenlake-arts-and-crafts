@@ -8,3 +8,11 @@ export async function getProducts(): Promise<Product[]> {
     }
     return data as Product[];
 }
+
+export async function getProductByID(id: string): Promise<Product | null> {
+    const { data, error } = await supabase.from("products").select("*").eq("id", id).single();
+    if (error) {
+        throw new Error(error.message);
+    }
+    return data as Product | null;
+}
