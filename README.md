@@ -1,75 +1,116 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Greenlake artist storefront
 
-Currently, two official plugins are available:
+Full-stack inventory and storefront management application for a handmade goods business.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## React Compiler
+## Overview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+This application is a business management platform designed to help manage handmade product inventory, orders, and online storefront operations
+The application is being developed in incremental sprints, starting with internal business tools before expanding into customer-facing featuers
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Project Status
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+🚧 Currently in Development
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Current Sprint:
 
+### Sprint 1 - Inventory Management MVP
+
+Building the foundation for product management and inventory tracking.
+
+---
+## Features
+### Admin Dashboard
+- Product inventory management
+- Create and edit products
+- Track inventory quantities
+- Manage product status
+- Order management
+- Business analytics
+
+### Customer Storefront
+- Browse products
+- Product details
+- Shopping cart
+- Checkout
+- Cutomer orders
+
+---
+
+
+## Roadmap
+
+### Sprint 1 - Inventory MVP
+Status: Finishing Touches
+
+Goals:
+- [x] Design database schema
+- [x] Create backend API
+- [x] Product CRUD operations
+- [x] Admin product management UI
+- [x] Inventory tracking
+
+---
+
+### Sprint 2 - Product Media
+- [ ] Product image uploads
+- [ ] Supabase Storage integration
+- [ ] Product galleries
+
+---
+
+### Sprint 3 - Order Management
+- [ ] Order database
+- [ ] Order API
+- [ ] Admin order dashboard
+
+---
+
+### Sprint 4 - Business dashboard
+- [ ] Revenue tracking
+- [ ] Inventory alerts
+- [ ] Sales analytics
+
+---
+
+### Sprint 5 - Public Storefront
+- [ ] Product catalog
+- [ ] Product pages
+- [ ] Cart
+- [ ] Checkout
+
+---
+
+
+## Tech Stack
+
+**Client:** React, Vite, TailwindCSS, shadcn/ui
+
+**Server:** Node, Express,
+
+**Database:** PostgreSQL, Supabase
+
+---
+
+### Architecture
+```
+Client
+React + TypeScript
+|
+|
+REST API
+|
+|
+Server
+Express + TypeScript
+|
+|
+Supabase
+PostgreSQL
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+---
