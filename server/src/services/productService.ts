@@ -39,3 +39,13 @@ export async function deleteProduct(id: string): Promise<void> {
         throw new Error(error.message);
     }
 }
+
+export async function uploadProductImage(file: Express.Multer.File): Promise<string> {
+    const fileName = `${Date.now()}-${file.originalname}`;
+    const { data, error } = await supabase.storage.from("product-images").upload(fileName, file.buffer, { contentType: file.mimetype });
+    if (error) {
+        throw new Error(error.message);
+    }
+    const { data: { publicUrl } } = supabase.storage.from("product-images").getPublicUrl(data.path);
+    return publicUrl;
+}
