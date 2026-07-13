@@ -71,25 +71,24 @@ export default function ProductForm() {
             alert("Please fill in all fields");
             return;
         }
+
+        type ProductPayload = ProductFormData & { image_url?: string };
+        let payload: ProductPayload = { ...formData };
+
+        if (imageFile) {
+            const imageResponse = await uploadProductImage(imageFile);
+            payload = { ...payload, image_url: imageResponse.publicUrl };
+        }
+
         if (isEdit) {
-            await updateProduct(id, formData);
+            await updateProduct(id, payload);
         } else {
-            if (imageFile) {
-                const imageResponse = await uploadProductImage(imageFile);
-                console.log(imageResponse);
-            }
-            await createProduct(formData);
+            await createProduct(payload);
             localStorage.removeItem(DRAFT_KEY);
         }
+
         toast(isEdit ? "Product updated successfully!" : "Product created successfully!", {position: "top-center"});
         navigate("/admin/inventory");
-    };
-
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-        setImageFile(file);
-        setPreviewUrl(URL.createObjectURL(file));
     };
 
     useEffect(() => {
@@ -107,6 +106,8 @@ export default function ProductForm() {
                 quantity: product.quantity,
                 status: product.status,
             })
+
+            setPreviewUrl((product as { image_url?: string }).image_url ?? null);
         }
 
         loadProduct();
@@ -126,6 +127,13 @@ export default function ProductForm() {
             )
         }
     }, [formData,isEdit])
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setImageFile(file);
+        setPreviewUrl(URL.createObjectURL(file));
+    };
 
     return (
         <div className="max-w-2xl">

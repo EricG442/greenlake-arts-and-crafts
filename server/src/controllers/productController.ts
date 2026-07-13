@@ -80,8 +80,8 @@ export async function uploadProductImage(req: Request, res: Response): Promise<v
             res.status(400).json({ message: "No file uploaded" });
             return;
         }
-        await productService.uploadProductImage(file);
-        res.status(200).json({ message: "Product image uploaded successfully" });
+        const result = await productService.uploadProductImage(file);
+        res.status(200).json({ message: "Product image uploaded successfully", publicUrl: result });
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Failed to upload product image" });

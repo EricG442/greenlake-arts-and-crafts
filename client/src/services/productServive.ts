@@ -69,5 +69,5 @@ export async function uploadProductImage(imageFile: File): Promise<any> {
     if (!response.ok) {
         throw new Error("Failed to upload image for product");
     }
-    return response.json();
+    return response.json() as Promise<any>;
 }
